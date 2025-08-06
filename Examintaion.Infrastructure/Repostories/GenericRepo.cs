@@ -123,6 +123,7 @@ namespace Examination.Infrastructure.Repostories
 
         public async Task<int> GetCountAsync(ISpecification<T> specification = null!)
         {
+            //test git
 
             if (specification == null)
             {
