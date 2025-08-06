@@ -1,4 +1,5 @@
 ﻿using Examination.Application.DTOs.Subject;
+using Examination.Domain.Common;
 
 namespace Examination.Application.Interfaces.SubjectService
 {
@@ -15,7 +16,7 @@ namespace Examination.Application.Interfaces.SubjectService
         /// Retrieves all subjects.
         /// </summary>
         /// <returns>A task that represents the asynchronous operation, containing a list of subject DTOs.</returns>
-        Task<IEnumerable<SubjectDto>> GetAllSubjects(GetAllSubjectsParams @params);
+        Task<PageModel<SubjectDto>> GetAllSubjects(GetAllSubjectsParams @params);
 
         Task<bool> DeleteSubject(Guid subjectId);
 

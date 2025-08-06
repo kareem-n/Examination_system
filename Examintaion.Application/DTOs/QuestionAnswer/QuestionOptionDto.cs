@@ -7,7 +7,5 @@
 
         public string AnswerTxt { get; set; } = null!;
 
-        public bool IsCorrect { get; set; }
-
     }
 }

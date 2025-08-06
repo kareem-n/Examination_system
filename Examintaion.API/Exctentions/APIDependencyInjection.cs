@@ -13,6 +13,9 @@ namespace Template.API.Exctentions
         public static IServiceCollection AddAPIDependencies(this IServiceCollection services, IConfiguration configuration)
         {
 
+            services.AddSignalR();
+
+
             services.AddEndpointsApiExplorer();
 
             var jwtSection = configuration.GetSection("JwtSettings");
@@ -35,6 +38,23 @@ namespace Template.API.Exctentions
                         ValidAudience = jwtSection["Audience"],
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSection["Key"]!))
                     };
+
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            var accessToken = context.Request.Query["access_token"];
+                            var path = context.HttpContext.Request.Path;
+
+                            if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hub/not"))
+                            {
+                                context.Token = accessToken;
+                            }
+
+                            return Task.CompletedTask;
+                        }
+                    };
+
                 });
 
 
@@ -64,6 +84,17 @@ namespace Template.API.Exctentions
 
             services.AddSerilog();
             services.AddScoped<GlobalExceptionMiddleware>();
+
+            services.AddCors(option =>
+            {
+                option.AddPolicy("CorsPolicy", builder =>
+                {
+                    builder.WithOrigins("http://localhost:4200")
+                           .AllowAnyMethod()
+                           .AllowAnyHeader()
+                           .AllowCredentials();
+                });
+            });
 
             return services;
         }

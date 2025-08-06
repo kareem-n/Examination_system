@@ -1,0 +1,16 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "Examintaion.API\\Examination.API.csproj",
+        "Action": "Start",
+        "DebugTarget": "https"
+      },
+      {
+        "Path": "EvalutaionService.cs\\EvalutaionService.cs.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

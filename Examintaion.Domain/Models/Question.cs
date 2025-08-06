@@ -19,5 +19,7 @@ namespace Examination.Domain.Models
 
         public List<Exam> Exams { get; set; }
 
+        public List<ExamQuestionsAnswer> ExamQuestionsAnswers { get; set; }
+
     }
 }

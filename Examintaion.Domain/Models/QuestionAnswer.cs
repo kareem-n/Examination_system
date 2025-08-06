@@ -14,5 +14,7 @@ namespace Examination.Domain.Models
         [ForeignKey(nameof(QuestionId))]
         public Question Question { get; set; } = null!;
 
+        public List<ExamQuestionsAnswer> ExamQuestionsAnswers { get; set; }
+
     }
 }

@@ -49,6 +49,9 @@ namespace Examintaion.Infrastructure.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -88,6 +91,9 @@ namespace Examintaion.Infrastructure.Migrations
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -148,6 +154,40 @@ namespace Examintaion.Infrastructure.Migrations
                     b.HasIndex("SubjectId");
 
                     b.ToTable("Exams");
+                });
+
+            modelBuilder.Entity("Examination.Domain.Models.ExamQuestionsAnswer", b =>
+                {
+                    b.Property<Guid>("ExamId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("QuestionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("QuestionAnswerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getdate()");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("ExamId", "QuestionId", "QuestionAnswerId");
+
+                    b.HasIndex("QuestionAnswerId");
+
+                    b.HasIndex("QuestionId");
+
+                    b.ToTable("ExamQuestionsAnswers", (string)null);
                 });
 
             modelBuilder.Entity("Examination.Domain.Models.Question", b =>
@@ -524,6 +564,33 @@ namespace Examintaion.Infrastructure.Migrations
                     b.Navigation("Subject");
                 });
 
+            modelBuilder.Entity("Examination.Domain.Models.ExamQuestionsAnswer", b =>
+                {
+                    b.HasOne("Examination.Domain.Models.Exam", "Exam")
+                        .WithMany("ExamQuestionsAnswers")
+                        .HasForeignKey("ExamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Examination.Domain.Models.QuestionAnswer", "QuestionAnswer")
+                        .WithMany("ExamQuestionsAnswers")
+                        .HasForeignKey("QuestionAnswerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Examination.Domain.Models.Question", "Question")
+                        .WithMany("ExamQuestionsAnswers")
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Exam");
+
+                    b.Navigation("Question");
+
+                    b.Navigation("QuestionAnswer");
+                });
+
             modelBuilder.Entity("Examination.Domain.Models.Question", b =>
                 {
                     b.HasOne("Examination.Domain.Models.Subject", "Subject")
@@ -627,9 +694,21 @@ namespace Examintaion.Infrastructure.Migrations
                     b.Navigation("RefreshTokens");
                 });
 
+            modelBuilder.Entity("Examination.Domain.Models.Exam", b =>
+                {
+                    b.Navigation("ExamQuestionsAnswers");
+                });
+
             modelBuilder.Entity("Examination.Domain.Models.Question", b =>
                 {
+                    b.Navigation("ExamQuestionsAnswers");
+
                     b.Navigation("QuestionAnswers");
+                });
+
+            modelBuilder.Entity("Examination.Domain.Models.QuestionAnswer", b =>
+                {
+                    b.Navigation("ExamQuestionsAnswers");
                 });
 
             modelBuilder.Entity("Examination.Domain.Models.Subject", b =>

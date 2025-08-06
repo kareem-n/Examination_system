@@ -9,7 +9,7 @@ namespace Examintaion.Infrastructure.Configurations
         public void Configure(EntityTypeBuilder<Exam> builder)
         {
 
-            builder.HasKey(e => e.Id);
+            //builder.HasKey(e => e.Id);
 
             builder.Property(e => e.Id)
                 .ValueGeneratedOnAdd();

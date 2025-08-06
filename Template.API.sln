@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Examination.Domain", "Exami
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Examintaion.Infrastructure", "Examintaion.Infrastructure\Examintaion.Infrastructure.csproj", "{6763623B-1A02-4510-A26F-3388FAE5BA2B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvalutaionService.cs", "EvalutaionService.cs\EvalutaionService.cs.csproj", "{05994C95-D703-4683-8DBD-3C458FE5CED8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{6763623B-1A02-4510-A26F-3388FAE5BA2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6763623B-1A02-4510-A26F-3388FAE5BA2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6763623B-1A02-4510-A26F-3388FAE5BA2B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05994C95-D703-4683-8DBD-3C458FE5CED8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05994C95-D703-4683-8DBD-3C458FE5CED8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05994C95-D703-4683-8DBD-3C458FE5CED8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05994C95-D703-4683-8DBD-3C458FE5CED8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

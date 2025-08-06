@@ -37,6 +37,10 @@ namespace Template.API.Middlewares
 
                     default:
                         context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                        if (!string.IsNullOrEmpty(ex.Message))
+                            msg.Clear();
+
+                        msg.Append($"{ex.Message ?? ex.Message}");
                         break;
 
                 }

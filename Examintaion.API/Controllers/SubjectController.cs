@@ -1,5 +1,6 @@
 ﻿using Examination.Application.DTOs.Subject;
 using Examination.Application.Interfaces.SubjectService;
+using Examination.Domain.Common;
 using Microsoft.AspNetCore.Mvc;
 using Template.API.Response;
 
@@ -21,11 +22,11 @@ namespace Examination.API.Controllers
         {
 
             var result = await _subjectService.GetAllSubjects(@params);
-            if (result is null || !result.Any())
+            if (result is null || !result.Items.Any())
             {
                 return NotFound(ApiResponse<object>.Error(404, "No Subjects Found"));
             }
-            return Ok(ApiResponse<IEnumerable<SubjectDto>>.Success(200, "success", result));
+            return Ok(ApiResponse<PageModel<SubjectDto>>.Success(200, "success", result));
         }
 
         [HttpPost]

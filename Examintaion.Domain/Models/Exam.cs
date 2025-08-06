@@ -24,6 +24,7 @@ namespace Examination.Domain.Models
         public decimal Score { get; set; }
 
         public List<Question> Questions { get; set; } = [];
+        public List<ExamQuestionsAnswer> ExamQuestionsAnswers { get; set; } = [];
 
     }
 }

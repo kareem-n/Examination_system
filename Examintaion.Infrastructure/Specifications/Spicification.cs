@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using Examination.Domain.Common;
 using Template.Domain.Interfaces.Repostoreis;
 
 namespace Examination.Infrastructure.Specifications
@@ -8,30 +9,41 @@ namespace Examination.Infrastructure.Specifications
 
         public List<Expression<Func<T, bool>>>? Criteria { get; set; } = [];
         public List<Expression<Func<T, object>>>? Includes { get; set; }
-        public uint? Take { get; set; }
-        public uint? Skip { get; set; }
+        public List<SortOption<T>>? SortOptions { get; set; }
+        public int? PageNumber { get; set; }
+        public int? PageSize { get; set; }
+        public bool IsPaged { get; set; }
         public Expression<Func<T, object>>? Projection { get; set; }
-        public void AddIncludes(List<Expression<Func<T, object>>> inludes)
+        protected void AddIncludes(List<Expression<Func<T, object>>> inludes)
         {
             Includes = inludes;
         }
 
-        public void AddCriteria(Expression<Func<T, bool>> criteria)
+        protected void AddCriteria(Expression<Func<T, bool>> criteria)
         {
             Criteria!.Add(criteria);
         }
 
-        public void AddPagging(uint take, uint skip)
+        protected void AddPagging(int pageSize, int pageNumber)
         {
-            Take = take;
-            Skip = skip;
+            IsPaged = true;
+            PageSize = pageSize;
+            PageNumber = pageNumber;
         }
 
 
-        public void AddProjection(Expression<Func<T, object>> projection)
+        protected void AddProjection(Expression<Func<T, object>> projection)
         {
             Projection = projection;
         }
+        // add sort
+        protected void AddSort(SortOption<T> sort)
+        {
+            SortOptions ??= [];
+            SortOptions.Add(sort);
+        }
+
+
 
 
     }

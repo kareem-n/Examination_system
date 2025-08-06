@@ -105,7 +105,7 @@ namespace Template.Application.Services.Auth
                 };
                 return ApiResponse<RegisterResponseDto>.Success(201, "Registration Successful", response);
             }
-            var error = new { Email = "Email Already Exists" };
+            var error = new { Code = "EmailExists", Description = "Email Already Exists" };
             return ApiResponse<RegisterResponseDto>.Error(400, "Registration Failed", new[] { error });
         }
 

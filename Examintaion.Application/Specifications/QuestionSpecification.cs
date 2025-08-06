@@ -1,4 +1,5 @@
 ﻿using Examination.Application.DTOs.Question;
+using Examination.Application.DTOs.QuestionAnswer;
 using Examination.Domain.Models;
 using Examination.Infrastructure.Specifications;
 
@@ -11,15 +12,15 @@ namespace Examination.Application.Specifications
         {
 
 
-            if (@params.SubjectId != Guid.Empty)
+            if (@params.SubjectId != null && @params.SubjectId != Guid.Empty)
             {
                 AddCriteria(q => q.SubjectId == @params.SubjectId);
             }
 
 
-            if (@params.PageIndex > 0 && @params.PageSize > 0)
+            if (@params.PageNumber > 0 && @params.PageSize > 0)
             {
-                AddPagging((uint)@params.PageSize, (uint)((@params.PageIndex - 1) * @params.PageSize));
+                AddPagging(@params.PageSize, @params.PageNumber);
             }
 
 
@@ -27,6 +28,12 @@ namespace Examination.Application.Specifications
             {
                 Id = q.Id.ToString(),
                 QuestionTitle = q.QuestionText,
+                SubjectName = q.Subject.Title,
+                QuestionAnswerDtos = q.QuestionAnswers.Select(a => new QuestionAnswerDto
+                {
+                    AnswerTxt = a.AnswerText,
+                    IsCorrect = a.IsCorrect
+                }).ToList()
             });
 
 

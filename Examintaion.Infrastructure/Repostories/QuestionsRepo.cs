@@ -37,22 +37,24 @@ namespace Examintaion.Infrastructure.Repostories
             //_context.Set<Question>().AsNoTracking();
 
             var easyQuestions = _context.Set<Question>()
+                .Include(q => q.Subject)
                 .Include(q => q.QuestionAnswers)
                 .Where(q => q.SubjectId == subjectId && q.DeletedAt == null && q.DifficultyLevel == DifficultyLevel.Easy)
+                .OrderBy(q => Guid.NewGuid())
                 .Take(easyCount)
                 .ToList()
-                .OrderBy(q => Guid.NewGuid())
-                //.ToList()
                 ;
 
             var mediumQuestions = _context.Set<Question>()
                 .Include(q => q.Subject)
+                .Include(q => q.QuestionAnswers)
                 .Where(q => q.SubjectId == subjectId && q.DeletedAt == null && q.DifficultyLevel == DifficultyLevel.Medium)
                 .OrderBy(q => Guid.NewGuid())
                 .Take(mediumCount)
                 .ToList();
 
             var hardQuestions = _context.Set<Question>()
+                .Include(q => q.Subject)
                 .Include(q => q.QuestionAnswers)
                 .Where(q => q.SubjectId == subjectId && q.DeletedAt == null && q.DifficultyLevel == DifficultyLevel.Hard)
                 .OrderBy(q => Guid.NewGuid())

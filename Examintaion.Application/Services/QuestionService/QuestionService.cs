@@ -1,6 +1,7 @@
 ﻿using Examination.Application.DTOs.Question;
 using Examination.Application.Interfaces.QuestionService;
 using Examination.Application.Specifications;
+using Examination.Domain.Common;
 using Examination.Domain.Models;
 using Template.Domain.Interfaces.Repostoreis;
 
@@ -16,10 +17,10 @@ namespace Examination.Application.Services.QuestionService
         }
 
 
-        public async Task<IEnumerable<QuestionDto>> GetAllQuestions(GetAllQuestionsParams @params)
+        public async Task<PageModel<QuestionDto>> GetAllQuestions(GetAllQuestionsParams @params)
         {
-
             var spec = new QuestionSpecification(@params);
+            var count = await questionRepo.GetCountAsync(spec);
             var result = await questionRepo.GetAllAsync<QuestionDto>(spec);
 
             if (result is null)
@@ -27,7 +28,8 @@ namespace Examination.Application.Services.QuestionService
                 throw new Exception("No questions found");
             }
 
-            return result;
+
+            return new PageModel<QuestionDto>(result, count, @params.PageNumber, @params.PageSize);
 
         }
 

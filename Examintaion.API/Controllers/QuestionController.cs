@@ -1,5 +1,6 @@
 ﻿using Examination.Application.DTOs.Question;
 using Examination.Application.Interfaces.QuestionService;
+using Examination.Domain.Common;
 using Microsoft.AspNetCore.Mvc;
 using Template.API.Response;
 
@@ -20,14 +21,13 @@ namespace Examination.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllQuestions([FromQuery] GetAllQuestionsParams @params)
         {
-
             var result = await questionService.GetAllQuestions(@params);
 
-            if (result is null || !result.Any())
+            if (result is null || !result.Items.Any())
             {
                 return NotFound(ApiResponse<object>.Error(404, "No Questions Found"));
             }
-            return Ok(ApiResponse<IEnumerable<QuestionDto>>.Success(200, "success", result));
+            return Ok(ApiResponse<PageModel<QuestionDto>>.Success(200, "Questions Retreived Successfuly", result));
 
         }
 

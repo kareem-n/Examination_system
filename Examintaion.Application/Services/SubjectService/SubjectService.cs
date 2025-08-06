@@ -2,6 +2,7 @@
 using Examination.Application.DTOs.Subject;
 using Examination.Application.Interfaces.SubjectService;
 using Examination.Application.Specifications;
+using Examination.Domain.Common;
 using Examination.Domain.Models;
 using Template.Domain.Interfaces.Repostoreis;
 
@@ -49,19 +50,29 @@ namespace Examination.Application.Services.SubjectService
 
         }
 
-        public async Task<IEnumerable<SubjectDto>> GetAllSubjects(GetAllSubjectsParams @params)
+        public async Task<PageModel<SubjectDto>> GetAllSubjects(GetAllSubjectsParams @params)
         {
 
             var spec = new SubjectSpecification(@params);
-
+            var count = await _subjectRepo.GetCountAsync();
             var result = await _subjectRepo.GetAllAsync<SubjectDto>(spec);
+
+
 
             if (result == null)
             {
                 return null!;
             }
 
-            return result.ToList().AsReadOnly();
+            //if (!result.Any())
+            //{
+            //    throw new Exception("No subjects found");
+            //}
+
+            return new PageModel<SubjectDto>(result, count, @params.PageIndex, @params.PageSize);
+
+
+            //return result.ToList().AsReadOnly();
 
         }
 

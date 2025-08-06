@@ -1,5 +1,6 @@
 ﻿using System.Linq.Expressions;
 using Examination.Infrastructure.Data;
+using Examintaion.Infrastructure.Extentions;
 using Microsoft.EntityFrameworkCore;
 using Template.Domain.Common;
 using Template.Domain.Interfaces.Repostoreis;
@@ -49,8 +50,6 @@ namespace Examination.Infrastructure.Repostories
         {
             IQueryable<T> query = _context.Set<T>().AsNoTracking();
 
-            // Filter out deleted entities
-            query = query.Where(t => t.DeletedAt == null);
 
             if (specification != null)
             {
@@ -72,18 +71,24 @@ namespace Examination.Infrastructure.Repostories
                     }
                 }
 
-                // Apply pagination
-                if (specification.Skip.HasValue)
+                if (specification.SortOptions?.Count > 0)
                 {
-                    query = query.Skip((int)specification.Skip.Value);
+                    foreach (var sortOption in specification.SortOptions)
+                    {
+                        query = query.ApplySorting<T>(sortOption);
+                    }
                 }
 
-                if (specification.Take.HasValue)
+                if (specification.IsPaged)
                 {
-                    query = query.Take((int)specification.Take.Value);
+                    query = query.ApplyPaging(specification.PageSize!.Value, specification.PageNumber!.Value);
                 }
 
-                // Apply projection if specified
+
+
+                // add sort
+
+                //Apply projection if specified
                 if (specification.Projection != null)
                 {
                     return await query.Select(specification.Projection).Cast<TResult>().ToListAsync();
@@ -116,6 +121,26 @@ namespace Examination.Infrastructure.Repostories
             return await query.FirstOrDefaultAsync(t => t.Id == id);
         }
 
+        public async Task<int> GetCountAsync(ISpecification<T> specification = null!)
+        {
+
+            if (specification == null)
+            {
+                return await _context.Set<T>().CountAsync();
+            }
+            IQueryable<T> query = _context.Set<T>().AsNoTracking();
+            // Apply criteria filters
+            if (specification.Criteria != null && specification.Criteria.Any())
+            {
+                foreach (var criteria in specification.Criteria)
+                {
+                    query = query.Where(criteria);
+                }
+            }
+
+
+            return await query.CountAsync();
+        }
 
         public async Task<T?> UpdateAsync(T entity)
         {

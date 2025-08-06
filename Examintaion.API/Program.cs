@@ -1,4 +1,6 @@
-﻿using Scalar.AspNetCore;
+﻿using Examination.Domain.Common;
+using Examintaion.Infrastructure.SingalR;
+using Scalar.AspNetCore;
 using Template.API.Exctentions;
 using Template.API.Middlewares;
 using Template.Application.Extentions;
@@ -11,7 +13,9 @@ namespace Template.API
         {
             var builder = WebApplication.CreateBuilder(args);
 
-
+            builder.Services.Configure<MongoDBSettings>(
+                builder.Configuration.GetSection("")
+                );
 
             // Add services that is related to API Layer to the container.
             builder.Services.AddAPIDependencies(builder.Configuration);
@@ -22,6 +26,8 @@ namespace Template.API
 
             var app = builder.Build();
             app.UseSwagger();
+
+            app.UseCors("CorsPolicy");
 
             app.MapScalarApiReference("/scalar/v1");
             app.MapOpenApi();
@@ -80,6 +86,7 @@ namespace Template.API
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.MapHub<NotificationHub>("/hub/not");
             app.MapControllers();
 
             app.Run();
